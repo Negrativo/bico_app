@@ -1,4 +1,3 @@
-
 import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
@@ -6,19 +5,24 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import Perfil from '../../pages/principal/perfil/Perfil';
 import CategoriasServico from '../../pages/principal/categoriasServico/CategoriasServico';
 import { propsNavigationStack } from './models/model';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { colors } from '../../theme';
 
 const { Navigator, Screen } = createMaterialBottomTabNavigator<propsNavigationStack>();
 
 export default function BottomTabs() {
   return (
-    <Navigator barStyle={{ backgroundColor: '#000000' }}>
+    <Navigator
+      activeColor={colors.primary}
+      inactiveColor={colors.textMuted}
+      barStyle={{ backgroundColor: colors.surface }}
+    >
       <Screen
         name="CategoriaServico"
         component={CategoriasServico}
         options={{
+          tabBarLabel: 'Início',
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="home" color={"#EDEDED"} size={26} />
+            <MaterialCommunityIcons name="home-variant-outline" color={color} size={24} />
           ),
         }}
       />
@@ -26,11 +30,12 @@ export default function BottomTabs() {
         name="Perfil"
         component={Perfil}
         options={{
+          tabBarLabel: 'Perfil',
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="account" color={"#EDEDED"} size={26} />
+            <MaterialCommunityIcons name="account-circle-outline" color={color} size={24} />
           ),
         }}
       />
     </Navigator>
-  )
+  );
 }

@@ -1,103 +1,75 @@
 import { StyleSheet } from 'react-native';
+import { colors, radius, shadow, spacing, typography } from '../../../theme';
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#FCFCFC',
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center'
-  },
-  containerPesquisa: {
-    backgroundColor: '#FFFFFF',
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center'
-  },
-  containerListaServicos: {
-    backgroundColor: '#FFFFFF',
-    alignItems: 'flex-start',
-    borderWidth: 0.2,
-    width: 400,
-    paddingHorizontal: 10
-  },
-  contornoDadosLista: {
-    height: 30,
-    justifyContent: 'center'
-  },
-  Text: {
-    fontSize: 18,
-    color: '#000000'
-  },
-  textoCategorias: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    alignItems: 'flex-start',
-    marginVertical: 10
-  },
-  barraPesquisa: {
-    backgroundColor: '#FFFFFF',
-    width: 290,
-  },
-  imagem: {
-    resizeMode: "cover",
+  container: { flex: 1, backgroundColor: colors.background },
+
+  searchWrap: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.pill,
+    flexDirection: 'row',
     alignItems: 'center',
+    paddingHorizontal: spacing.md,
+    height: 48,
+    marginHorizontal: spacing.lg,
+    marginBottom: spacing.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  searchInput: {
+    flex: 1,
+    marginLeft: spacing.sm,
+    color: colors.textPrimary,
+    fontSize: typography.size.body,
+    paddingVertical: 0,
+  },
+
+  list: {
+    paddingHorizontal: spacing.lg,
+    paddingBottom: spacing.xl,
+  },
+
+  row: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.md,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.lg,
+    marginBottom: spacing.sm,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    ...shadow.sm,
+  },
+  rowLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  iconCircle: {
     width: 40,
     height: 40,
-    right: 10
-  },
-  formBarraPesquisa: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 0.2,
-    borderRadius: 50,
-    width: 350,
-    height: 40,
-    justifyContent: "flex-end",
-    flexDirection: "row",
-    marginBottom: 15
-  },
-  formNavegacaoPrincipal: {
-    flex: 1,
-    justifyContent: "center",
-    flexDirection: 'column',
+    borderRadius: 20,
+    backgroundColor: colors.primaryLight,
     alignItems: 'center',
-    marginTop: 10,
+    justifyContent: 'center',
+    marginRight: spacing.md,
   },
-  formNavegacaoFavoritos: {
-    width: 350,
-    height: 4,
+  rowText: {
     flex: 1,
-    justifyContent: "center",
-    flexDirection: 'column',
-    alignItems: 'center',
-    marginTop: 45,
-    marginBottom: 15
+    fontSize: typography.size.bodyLg,
+    color: colors.textPrimary,
+    fontWeight: typography.weight.medium,
   },
-  formRecomendacao: {
-    backgroundColor: '#1087AC',
-    width: 170,
-    height: 25,
-    borderWidth: 0.2,
-    borderRadius: 15,
-    marginHorizontal: 5,
-    alignItems: 'center'
-  },
-  formCategorias: {
 
+  empty: {
+    alignItems: 'center',
+    paddingVertical: spacing.xxl,
   },
-  formGrupoRecomendacao: {
-    justifyContent: "flex-start",
-    flexDirection: "row",
-    marginLeft: 15,
-    marginRight: 15
+  emptyText: {
+    marginTop: spacing.sm,
+    color: colors.textSecondary,
+    fontSize: typography.size.body,
   },
-  scrollView: {
-    marginHorizontal: 20,
-    flex: 1,
-    marginTop: 30
-  },
-  grupoCargosPesquisa: {
-    padding: 10,
-  }
 });
 
 export default styles;

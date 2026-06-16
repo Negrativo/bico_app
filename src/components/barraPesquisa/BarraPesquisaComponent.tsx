@@ -1,43 +1,60 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { BarraPesquisaProps } from './BarraPesquisaProps';
 import styles from './StyleBarraPesquisaComponent';
+import { colors } from '../../theme';
 
 export default function Pesquisa(props: BarraPesquisaProps) {
-  const iconPesquisa = require('../../../assets/pesquisar.png');
-  const [Search, setSearch] = useState('');
+  const [search, setSearch] = useState('');
   const listaEmpregos = props.Lista;
   const placeholder = props.placeholder;
 
   function selecionado(nome: string) {
     props.selecionaProfissao(nome);
+    setSearch('');
   }
+
+  const filtrados =
+    search.length > 0
+      ? listaEmpregos.filter(list =>
+          list.toLowerCase().includes(search.toLowerCase()),
+        )
+      : [];
 
   return (
     <View style={styles.formComponente}>
       <View style={styles.formBarraPesquisa}>
+        <Icon name="magnify" size={20} color={colors.textSecondary} />
         <TextInput
           style={styles.barraPesquisa}
+          value={search}
           onChangeText={setSearch}
           placeholder={placeholder}
+          placeholderTextColor={colors.textMuted}
         />
-        <Image source={iconPesquisa} style={styles.iconPesquisa} />
+        {search.length > 0 && (
+          <TouchableOpacity onPress={() => setSearch('')}>
+            <Icon name="close-circle" size={18} color={colors.textMuted} />
+          </TouchableOpacity>
+        )}
       </View>
-      <ScrollView>
-        {
-          !(Search === '')
-          && listaEmpregos
-            .filter(list => list.toLowerCase().includes(Search.toLowerCase()))
-            .map((list: string, index: number) => (
-              <View key={index} style={styles.itensPesquisa}>
-                <TouchableOpacity key={index} style={styles.botaoSelecao} onPress={() => selecionado(list)}>
-                  <Text style={styles.textoOpcao}>{list}</Text>
-                </TouchableOpacity>
-              </View>
-            ))
-        }
-      </ScrollView>
-    </View>
 
+      {filtrados.length > 0 && (
+        <View style={styles.resultsCard}>
+          <ScrollView keyboardShouldPersistTaps="handled">
+            {filtrados.map((list, index) => (
+              <TouchableOpacity
+                key={`${list}-${index}`}
+                style={styles.itensPesquisa}
+                onPress={() => selecionado(list)}
+              >
+                <Text style={styles.textoOpcao}>{list}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+      )}
+    </View>
   );
 }

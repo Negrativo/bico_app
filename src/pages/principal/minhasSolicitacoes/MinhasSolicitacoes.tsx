@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import { View, Text, FlatList, RefreshControl, ActivityIndicator } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
+import { View, FlatList, RefreshControl, ActivityIndicator } from 'react-native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 import styles from './StyleMinhasSolicitacoes';
 import {
@@ -10,12 +10,16 @@ import {
 import { useUser } from '../../../context/AuthContext';
 import { ServicoDoUsuarioDTO } from '../../../dtos/ServicoDoUsuarioDTO';
 import SolicitacaoServico from '../../../components/solicitacaoServico/SolicitacaoServicoComponent';
+import { EmptyState, Header, Screen } from '../../../components/ui';
+import { propsStack } from '../../../routes/stack/models/model';
+import { colors, spacing } from '../../../theme';
 
 export default function MinhasSolicitacoes() {
   const [dadosLista, setDados] = useState<ServicoDoUsuarioDTO[]>([]);
   const [carregando, setCarregando] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const { user } = useUser();
+  const navigation = useNavigation<propsStack>();
 
   const carregar = useCallback(async () => {
     if (!user?.id) {
@@ -48,18 +52,27 @@ export default function MinhasSolicitacoes() {
 
   const onCancelar = async (id: string) => atualizarItem(await cancelarSolicitacao(id));
 
-  if (carregando) {
-    return (
-      <View style={[styles.container, styles.vazioWrapper]}>
-        <ActivityIndicator size="large" color="#0c5fa8" />
-      </View>
-    );
-  }
-
   return (
-    <View style={styles.container}>
-      <Text style={styles.titulo}>Minhas solicitações</Text>
-      {dadosLista.length > 0 ? (
+    <Screen padded={false}>
+      <View style={{ paddingHorizontal: spacing.lg }}>
+        <Header
+          title="Minhas solicitações"
+          subtitle={dadosLista.length > 0 ? `${dadosLista.length} pedido${dadosLista.length > 1 ? 's' : ''}` : undefined}
+          onBack={() => navigation.goBack()}
+        />
+      </View>
+
+      {carregando ? (
+        <View style={styles.loaderWrapper}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      ) : dadosLista.length === 0 ? (
+        <EmptyState
+          icon="clipboard-text-outline"
+          title="Nenhuma solicitação"
+          description="Você ainda não solicitou nenhum serviço. Explore as categorias na tela inicial."
+        />
+      ) : (
         <FlatList
           contentContainerStyle={styles.conteudo}
           showsVerticalScrollIndicator={false}
@@ -67,6 +80,8 @@ export default function MinhasSolicitacoes() {
           keyExtractor={item => item.id}
           refreshControl={
             <RefreshControl
+              tintColor={colors.primary}
+              colors={[colors.primary]}
               refreshing={refreshing}
               onRefresh={() => {
                 setRefreshing(true);
@@ -89,11 +104,7 @@ export default function MinhasSolicitacoes() {
             />
           )}
         />
-      ) : (
-        <View style={styles.vazioWrapper}>
-          <Text style={styles.textoVazio}>Você ainda não fez nenhuma solicitação.</Text>
-        </View>
       )}
-    </View>
+    </Screen>
   );
 }

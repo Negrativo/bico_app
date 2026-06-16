@@ -1,147 +1,152 @@
 import { StyleSheet } from 'react-native';
+import { colors, radius, shadow, spacing, typography } from '../../../theme';
 
 const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: colors.background },
 
-  container: {
-    backgroundColor: '#FCFCFC',
+  hero: {
+    backgroundColor: colors.primary,
+    paddingTop: spacing.xl,
+    paddingBottom: spacing.xxxl,
+    paddingHorizontal: spacing.lg,
+    borderBottomLeftRadius: radius.xl,
+    borderBottomRightRadius: radius.xl,
+    alignItems: 'center',
+  },
+  avatarRing: {
+    backgroundColor: 'rgba(255,255,255,0.18)',
+    padding: 4,
+    borderRadius: 100,
+  },
+  nome: {
+    color: colors.textOnPrimary,
+    fontSize: typography.size.titleLg,
+    fontWeight: typography.weight.bold,
+    marginTop: spacing.md,
+    textAlign: 'center',
+  },
+  email: {
+    color: 'rgba(255,255,255,0.85)',
+    fontSize: typography.size.body,
+    marginTop: spacing.xs,
+    textAlign: 'center',
+  },
+  roleBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    borderRadius: radius.pill,
+    marginTop: spacing.md,
+  },
+  roleBadgeText: {
+    color: colors.textOnPrimary,
+    fontSize: typography.size.caption,
+    fontWeight: typography.weight.semibold,
+    marginLeft: spacing.xs,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+
+  statsCard: {
+    backgroundColor: colors.surface,
+    marginHorizontal: spacing.lg,
+    marginTop: -spacing.xl,
+    borderRadius: radius.lg,
+    paddingVertical: spacing.lg,
+    paddingHorizontal: spacing.md,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    ...shadow.md,
+  },
+  statItem: {
+    alignItems: 'center',
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center'
+  },
+  statValue: {
+    fontSize: typography.size.titleLg,
+    fontWeight: typography.weight.bold,
+    color: colors.textPrimary,
+  },
+  statLabel: {
+    fontSize: typography.size.caption,
+    color: colors.textSecondary,
+    marginTop: spacing.xs,
+    textAlign: 'center',
+  },
+  statDivider: {
+    width: 1,
+    backgroundColor: colors.border,
+    marginVertical: spacing.xs,
   },
 
-  scrollContainer: {
-    backgroundColor: '#FCFCFC',
+  scrollContent: {
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.xl,
+    paddingBottom: spacing.xxl,
+  },
+
+  sectionLabel: {
+    fontSize: typography.size.caption,
+    fontWeight: typography.weight.semibold,
+    color: colors.textMuted,
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
+    marginBottom: spacing.sm,
+    marginTop: spacing.lg,
+  },
+
+  menuCard: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.lg,
+    overflow: 'hidden',
+    ...shadow.sm,
+  },
+  menuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: spacing.lg,
+    paddingHorizontal: spacing.lg,
+  },
+  menuIconWrap: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: colors.primaryLight,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: spacing.md,
+  },
+  menuIconDanger: {
+    backgroundColor: colors.dangerLight,
+  },
+  menuLabel: {
     flex: 1,
+    fontSize: typography.size.bodyLg,
+    color: colors.textPrimary,
+    fontWeight: typography.weight.medium,
+  },
+  menuLabelDanger: {
+    color: colors.danger,
+  },
+  menuDescription: {
+    fontSize: typography.size.caption,
+    color: colors.textSecondary,
+    marginTop: 2,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: colors.border,
+    marginLeft: spacing.lg + 40 + spacing.md,
   },
 
-
-  formFotoPerfil: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 25
+  version: {
+    textAlign: 'center',
+    color: colors.textMuted,
+    fontSize: typography.size.caption,
+    marginTop: spacing.xl,
   },
-
-  formDescricao: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 5
-  },
-
-  formHistorico: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 5
-  },
-
-  formInputDescricao: {
-    backgroundColor: "#000000",
-    height: 200,
-    width: 320,
-    borderWidth: 0.5,
-    borderRadius: 50,
-    margin: 5,
-  },
-
-  formCabecalhoPerfil: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  formBottons: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  inputDescricao: {
-    color: "#FFFFFF",
-    textAlignVertical: 'top',
-    margin: 20
-  },
-
-  fundoFoto: {
-    resizeMode: "cover",
-    justifyContent: "center",
-    alignItems: 'center',
-    backgroundColor: '#C4C4C4',
-    width: 150,
-    height: 150,
-    borderWidth: 0.5,
-    borderRadius: 80,
-    margin: 10
-  },
-
-  fotoPerfil: {
-    width: 150,
-    height: 150,
-    borderWidth: 0.5,
-    borderRadius: 80,
-    margin: 10
-  },
-
-  bottomFoto: {
-    backgroundColor: "#000000",
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 30,
-    width: 150,
-    borderWidth: 0.5,
-    borderRadius: 50,
-  },
-
-  textFoto: {
-    color: "#FFFFFF"
-  },
-
-  textNome: {
-    fontSize: 24,
-    fontWeight: "bold",
-    margin: 5,
-    color: '#000000'
-  },
-
-  Text: {
-    fontSize: 30,
-    color: '#000000'
-  },
-
-  textGeral: {
-    fontSize: 18,
-    color: '#000000'
-  },
-
-  textBottom: {
-    fontSize: 18,
-    color: "#FFFFFF"
-  },
-
-  textHistorico: {
-    fontSize: 14,
-    margin: 5
-  },
-
-  formCategorias: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 150,
-    margin: 20
-  },
-
-  buttonCadastro: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 5,
-    backgroundColor: '#00000F',
-    borderWidth: 0.2,
-    borderRadius: 50,
-    width: 200,
-    height: 50,
-  },
-
-  divisoria: {
-    color: 'black',
-    fontSize: 24
-  },
-
 });
 
 export default styles;

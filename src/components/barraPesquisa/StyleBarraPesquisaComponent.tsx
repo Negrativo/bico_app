@@ -1,56 +1,55 @@
 import { StyleSheet } from 'react-native';
+import { colors, radius, spacing, typography, shadow } from '../../theme';
 
 const styles = StyleSheet.create({
-
   formComponente: {
-    backgroundColor: '#C4C4C4',
-    borderRadius: 25,
-    width: 350,
+    width: '100%',
     position: 'relative',
-    maxHeight: 120,
-    overflow: 'visible',
   },
   formBarraPesquisa: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 0.5,
-    borderRadius: 50,
-    width: 350,
-    height: 40,
-    justifyContent: "flex-end",
-    flexDirection: "row",
+    backgroundColor: colors.surface,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    borderColor: colors.border,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: spacing.md,
   },
-
-  barraPesquisa: {
-    backgroundColor: '#FFFFFF',
-    width: 290,
-    color: 'black'
-  },
-
   iconPesquisa: {
-    resizeMode: "cover",
-    alignItems: 'center',
-    width: 40,
-    height: 40,
-    right: 10
-  },
-
-  itensPesquisa: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 2,
-  },
-
-  textoOpcao: {
-    fontSize: 18
-  },
-
-  botaoSelecao: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 350,
+    width: 20,
     height: 20,
+    tintColor: colors.textSecondary,
+    marginRight: spacing.sm,
   },
-
+  barraPesquisa: {
+    flex: 1,
+    color: colors.textPrimary,
+    fontSize: typography.size.bodyLg,
+    paddingVertical: 0,
+  },
+  resultsCard: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.md,
+    marginTop: spacing.sm,
+    maxHeight: 220,
+    ...shadow.sm,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  itensPesquisa: {
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  textoOpcao: {
+    fontSize: typography.size.body,
+    color: colors.textPrimary,
+  },
+  botaoSelecao: {
+    width: '100%',
+  },
 });
 
 export default styles;

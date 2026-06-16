@@ -1,96 +1,109 @@
 import { StyleSheet } from 'react-native';
+import { colors, radius, shadow, spacing, typography } from '../../../theme';
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FCFCFC',
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center'
+    backgroundColor: colors.background,
   },
-  Text: {
-    fontSize: 30
-  },
-  textoCategorias: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    alignItems: 'flex-start',
-    color: '#000000'
-  },
-  containerPesquisa: {
-    backgroundColor: '#FFFFFF',
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center'
-  },
-  barraPesquisa: {
-    backgroundColor: '#FFFFFF',
-    width: 290,
-    marginVertical: 1
-  },
-  imagem: {
-    resizeMode: "cover",
-    alignItems: 'center',
-    width: 40,
-    height: 40,
-    right: 10
-  },
-  formBarraPesquisa: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 0.2,
-    borderRadius: 50,
-    width: 350,
-    height: 40,
-    justifyContent: "flex-end",
-    flexDirection: "row",
-    marginTop: 45,
-    marginBottom: 15
-  },
-  formNavegacaoPrincipal: {
-    width: 350,
-    height: 4,
-    flex: 1,
-    justifyContent: "center",
-    flexDirection: 'column',
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 15
-  },
-  formNavegacaoFavoritos: {
-    width: 350,
-    height: 4,
-    flex: 1,
-    justifyContent: "center",
-    flexDirection: 'column',
-    alignItems: 'center',
-    marginTop: 45,
-    marginBottom: 15
-  },
-  formRecomendacao: {
-    backgroundColor: '#1087AC',
-    width: 170,
-    height: 25,
-    borderWidth: 0.2,
-    borderRadius: 15,
-    marginHorizontal: 5,
-    alignItems: 'center'
-  },
-  formCategorias: {
 
+  hero: {
+    backgroundColor: colors.primary,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.xl,
+    paddingBottom: spacing.xxl,
+    borderBottomLeftRadius: radius.xl,
+    borderBottomRightRadius: radius.xl,
   },
-  formGrupoRecomendacao: {
-    justifyContent: "flex-start",
-    flexDirection: "row",
-    marginLeft: 15,
-    marginRight: 15
+  heroRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: spacing.lg,
   },
-  scrollView: {
-    marginHorizontal: 20,
+  heroGreeting: {
+    color: 'rgba(255,255,255,0.85)',
+    fontSize: typography.size.body,
+  },
+  heroName: {
+    color: colors.textOnPrimary,
+    fontSize: typography.size.title,
+    fontWeight: typography.weight.bold,
+    marginTop: 2,
+  },
+  heroIconBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(255,255,255,0.18)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  searchWrap: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.pill,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: spacing.md,
+    height: 50,
+    ...shadow.md,
+  },
+  searchInput: {
     flex: 1,
-    marginTop: 30
+    fontSize: typography.size.bodyLg,
+    color: colors.textPrimary,
+    marginLeft: spacing.sm,
+    paddingVertical: 0,
   },
-  grupoCargosPesquisa: {
-    padding: 10,
-  }
+
+  content: {
+    flex: 1,
+    marginTop: -spacing.xl,
+  },
+  scrollContent: {
+    paddingHorizontal: spacing.sm,
+    paddingTop: spacing.lg,
+    paddingBottom: spacing.xl,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: spacing.md,
+    marginBottom: spacing.sm,
+  },
+  sectionTitle: {
+    fontSize: typography.size.title,
+    fontWeight: typography.weight.bold,
+    color: colors.textPrimary,
+  },
+  sectionCount: {
+    fontSize: typography.size.caption,
+    color: colors.textSecondary,
+  },
+
+  emptyResults: {
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.xl,
+    alignItems: 'center',
+  },
+
+  servicoRow: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.md,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.lg,
+    marginHorizontal: spacing.md,
+    marginVertical: spacing.xs,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  servicoText: { flex: 1, fontSize: typography.size.body, color: colors.textPrimary },
+  servicoCategoria: { fontSize: typography.size.caption, color: colors.textMuted, marginTop: 2 },
 });
 
 export default styles;

@@ -1,83 +1,83 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { GOOGLE_API_KEY } from '../../../../environments';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 import { AgendamentoServicoParams, propsStack } from '../../../routes/stack/models/model';
 import { SolicitacaoDTO } from '../../../dtos/SolicitacaoDTO';
 import { solicitarServico } from '../../../service/solicitacaoService/solicitacaoService';
 import { useUser } from '../../../context/AuthContext';
-import { useNavigation } from '@react-navigation/native';
 import CalendarioComponent from '../../../components/calendario/CalendarioComponent';
-import DateTimePicker from '@react-native-community/datetimepicker'
+import DateTimePicker from '@react-native-community/datetimepicker';
 import Local from '@react-native-community/geolocation';
 import Geocoder from 'react-native-geocoding';
 import styles from './StyleAgendamentoServico';
 import Toast from 'react-native-toast-message';
+import { Button, Header, Screen } from '../../../components/ui';
+import { colors, spacing } from '../../../theme';
+import moment from 'moment';
 
-export default function () {
+export default function AgendamentoServico() {
   Geocoder.init(GOOGLE_API_KEY);
   const navigation = useNavigation<propsStack>();
-  const [horaAgendamento, setHoras] = useState('00:00');
+  const [horaAgendamento, setHoras] = useState('');
   const [mostraSelecaoHorario, setSelecaoHorario] = useState(false);
   const [diaSelecionado, setDiaSelecionado] = useState<string>('');
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState('');
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
-  const [observacao, setObservacao] = useState("");
+  const [observacao, setObservacao] = useState('');
   const [enviando, setEnviando] = useState(false);
+  const [buscandoLocal, setBuscandoLocal] = useState(false);
 
   const { user } = useUser();
   const params = useRoute();
   const servicoSelecionado: AgendamentoServicoParams = params.params as unknown as AgendamentoServicoParams;
 
-  const getLocate = async () => {
-    Geocoder.init(GOOGLE_API_KEY);
+  const getLocate = () => {
+    setBuscandoLocal(true);
     Local.getCurrentPosition(
-      (position) => {
+      position => {
         setLatitude(position.coords.latitude);
         setLongitude(position.coords.longitude);
-
         Geocoder.from({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         })
           .then(addressJson => {
-            const _location = addressJson.results[0].formatted_address;
-            setLocation(_location);
+            setLocation(addressJson.results[0].formatted_address);
+            setBuscandoLocal(false);
           })
-          .catch(error => {
+          .catch(() => {
+            setBuscandoLocal(false);
             Toast.show({
               type: 'error',
               text1: 'Erro ao buscar localização',
-              text2: 'Verifique se a localização do aparelho esta habilitada e o BICO tem permissão.',
-              visibilityTime: 8000,
+              text2: 'Verifique se a localização do aparelho está habilitada e o BICO tem permissão.',
+              visibilityTime: 6000,
             });
           });
       },
-      (error) => {
+      () => {
+        setBuscandoLocal(false);
         Toast.show({
           type: 'error',
           text1: 'Erro ao buscar localização',
-          text2: 'Verifique se a localização do aparelho esta habilitada e o BICO tem permissão.',
-          visibilityTime: 8000,
+          text2: 'Verifique se a localização do aparelho está habilitada e o BICO tem permissão.',
+          visibilityTime: 6000,
         });
-        console.log('Error location: ' + error);
       },
-      {
-        enableHighAccuracy: true,
-        timeout: 12000,
-        maximumAge: 1000
-      }
-    )
-  }
+      { enableHighAccuracy: true, timeout: 12000, maximumAge: 1000 },
+    );
+  };
 
-  const onChange = (event: any, selectedDate: any) => {
-    if (event.type === "set") {
-      let currentDate = selectedDate.toString();
-      currentDate = currentDate.slice(16, 21);
-      setHoras(currentDate);
+  const onChangeHora = (event: any, selectedDate: any) => {
+    if (event.type === 'set' && selectedDate) {
+      const h = String(selectedDate.getHours()).padStart(2, '0');
+      const m = String(selectedDate.getMinutes()).padStart(2, '0');
+      setHoras(`${h}:${m}`);
     }
-    setSelecaoHorario(!mostraSelecaoHorario);
+    setSelecaoHorario(false);
   };
 
   const solicitar = async () => {
@@ -89,18 +89,18 @@ export default function () {
       Toast.show({ type: 'error', text1: 'Selecione uma data no calendário' });
       return;
     }
-    if (!horaAgendamento || horaAgendamento === '00:00') {
+    if (!horaAgendamento) {
       Toast.show({ type: 'error', text1: 'Selecione um horário' });
       return;
     }
     if (!latitude || !longitude || !location) {
-      Toast.show({ type: 'error', text1: 'Selecione uma localização (toque em "Buscar localização")' });
+      Toast.show({ type: 'error', text1: 'Adicione um endereço' });
       return;
     }
 
     setEnviando(true);
     try {
-      const solicitacaoDTO: SolicitacaoDTO = {
+      const dto: SolicitacaoDTO = {
         usuarioSolicitante: user.id,
         servico: servicoSelecionado.servicoSelecionado,
         diaSelecionado,
@@ -110,77 +110,154 @@ export default function () {
         longitude: longitude.toString(),
         endereco: location,
       };
-      const isSucess = await solicitarServico(solicitacaoDTO);
-      if (isSucess === true) {
+      const ok = await solicitarServico(dto);
+      if (ok === true) {
+        Toast.show({
+          type: 'success',
+          text1: 'Solicitação enviada!',
+          text2: 'Acompanhe em "Minhas solicitações"',
+        });
         navigation.navigate('Home');
       }
     } finally {
       setEnviando(false);
     }
-  }
+  };
+
+  const dataFormatada = diaSelecionado
+    ? moment(diaSelecionado).format('DD/MM/YYYY')
+    : null;
 
   return (
-    <ScrollView>
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.textNome}>{servicoSelecionado.servicoSelecionado}</Text>
-        <View style={styles.viewCalendario}>
-          <Text style={styles.textGeral}>Qual dia gostaria de agendar:</Text>
-          <CalendarioComponent
-            diaSelecionado={setDiaSelecionado}
-          ></CalendarioComponent>
+    <Screen padded={false} keyboardAware={false}>
+      <View style={{ paddingHorizontal: spacing.lg }}>
+        <Header title="Agendar serviço" onBack={() => navigation.goBack()} />
+      </View>
+
+      <View style={styles.hero}>
+        <Text style={styles.heroLabel}>Você vai contratar</Text>
+        <Text style={styles.heroTitle}>{servicoSelecionado.servicoSelecionado}</Text>
+      </View>
+
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
+        {/* Data */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <View style={styles.sectionIconWrap}>
+              <Icon name="calendar-month-outline" size={20} color={colors.primary} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.sectionTitle}>Data do serviço</Text>
+              <Text style={styles.sectionSubtitle}>
+                {dataFormatada ? `Selecionado: ${dataFormatada}` : 'Escolha um dia no calendário'}
+              </Text>
+            </View>
+          </View>
+          <CalendarioComponent diaSelecionado={setDiaSelecionado} />
         </View>
-        <View style={styles.viewHorario}>
-          <Text style={styles.textGeral}>Qual o melhor horário para a realização do serviço:</Text>
-          <TouchableOpacity onPress={() => setSelecaoHorario(true)} style={styles.horarioInput}>
-            <Text style={styles.textHoraSelecionada} >{horaAgendamento}</Text>
+
+        {/* Horário */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <View style={styles.sectionIconWrap}>
+              <Icon name="clock-outline" size={20} color={colors.primary} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.sectionTitle}>Horário</Text>
+              <Text style={styles.sectionSubtitle}>Quando o serviço deve começar</Text>
+            </View>
+          </View>
+          <TouchableOpacity
+            onPress={() => setSelecaoHorario(true)}
+            style={styles.horarioInput}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.horarioText}>
+              {horaAgendamento || '--:--'}
+            </Text>
+            <Icon name="clock-edit-outline" size={22} color={colors.primary} />
           </TouchableOpacity>
-          {mostraSelecaoHorario &&
+          {mostraSelecaoHorario && (
             <DateTimePicker
               testID="dateTimePicker"
               value={new Date()}
-              mode={'time'}
-              is24Hour={true}
+              mode="time"
+              is24Hour
               display="spinner"
-              onChange={onChange}
+              onChange={onChangeHora}
             />
-          }
+          )}
         </View>
-        <View style={styles.formObservacao}>
-          <Text style={styles.textGeral}>Deseja adicionar alguma observação?</Text>
-          <View style={styles.formInputObservacao}>
-            <TextInput style={styles.inputObservacao}
-              multiline={true}
-              placeholder={"Observação"}
-              placeholderTextColor={"#FFFFFF"}
-              maxLength={200}
-              onChangeText={setObservacao}
-            />
+
+        {/* Endereço */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <View style={styles.sectionIconWrap}>
+              <Icon name="map-marker-outline" size={20} color={colors.primary} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.sectionTitle}>Endereço</Text>
+              <Text style={styles.sectionSubtitle}>Onde o serviço será executado</Text>
+            </View>
           </View>
+
+          <View style={styles.enderecoBox}>
+            {location ? (
+              <Text style={styles.enderecoText}>{location}</Text>
+            ) : (
+              <Text style={styles.enderecoEmpty}>Nenhum endereço selecionado</Text>
+            )}
+          </View>
+
+          <Button
+            label={location ? 'Atualizar localização' : 'Usar minha localização'}
+            iconLeft="crosshairs-gps"
+            variant="secondary"
+            size="sm"
+            onPress={getLocate}
+            loading={buscandoLocal}
+          />
         </View>
-        <View style={styles.formEndereco}>
-          <Text style={styles.textGeral}>Selecione o endereço para realização do serviço:</Text>
-          <View style={styles.formInputObservacao}>
+
+        {/* Observação */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <View style={styles.sectionIconWrap}>
+              <Icon name="note-text-outline" size={20} color={colors.primary} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.sectionTitle}>Observação</Text>
+              <Text style={styles.sectionSubtitle}>Opcional — detalhes para o profissional</Text>
+            </View>
+          </View>
+          <View style={styles.textareaWrap}>
             <TextInput
-              style={styles.textEndereco}
-              multiline={false}
-              placeholder={"Adicionar endereço"}
-              placeholderTextColor={"#FFFFFF"}
+              style={styles.textarea}
+              multiline
+              numberOfLines={4}
               maxLength={200}
-            >
-              {location}
-            </TextInput>
+              value={observacao}
+              onChangeText={setObservacao}
+              placeholder="Ex: Apartamento 302, falar com porteiro João..."
+              placeholderTextColor={colors.textMuted}
+            />
           </View>
-          <TouchableOpacity onPress={getLocate}>
-            <Text style={styles.textAdicionarEndereco} >Buscar localização</Text>
-          </TouchableOpacity>
         </View>
-        <View>
-          <TouchableOpacity onPress={solicitar} disabled={enviando} style={[styles.buttonSolicitacao, enviando && { opacity: 0.6 }]}>
-            <Text style={styles.textFinalizacao}>{enviando ? 'ENVIANDO...' : 'SOLICITAR PROFISSIONAL'}</Text>
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
-    </ScrollView>
+      </ScrollView>
+
+      <View style={styles.footer}>
+        <Button
+          label={enviando ? 'ENVIANDO...' : 'SOLICITAR PROFISSIONAL'}
+          size="lg"
+          iconRight="send-outline"
+          onPress={solicitar}
+          loading={enviando}
+        />
+      </View>
+    </Screen>
   );
 }
-

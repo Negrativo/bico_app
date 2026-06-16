@@ -1,28 +1,29 @@
 import { StyleSheet } from 'react-native';
+import { colors, radius, spacing, typography } from '../../../theme';
 
 const styles = StyleSheet.create({
   formComponent: {
-    backgroundColor: '#000000',
-    width: 130,
-    height: 25,
-    borderWidth: 0.2,
-    borderRadius: 15,
-    margin: 5,
+    backgroundColor: colors.primaryLight,
+    borderRadius: radius.pill,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    margin: spacing.xs,
+    flexDirection: 'row',
     alignItems: 'center',
-    flexDirection: 'row'
+    alignSelf: 'flex-start',
   },
-
   text: {
-    color: 'white',
-    marginLeft: 10,
-    flex: 5
+    color: colors.primaryDark,
+    fontSize: typography.size.body,
+    fontWeight: typography.weight.semibold,
+    marginRight: spacing.xs,
   },
-
   remover: {
-    color: 'white',
-    fontSize: 15,
-    flex: 1,
-  }
+    color: colors.primary,
+    fontSize: typography.size.body,
+    fontWeight: typography.weight.bold,
+    marginLeft: spacing.xs,
+  },
 });
 
 export default styles;

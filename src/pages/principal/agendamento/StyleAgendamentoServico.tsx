@@ -1,109 +1,133 @@
 import { StyleSheet } from 'react-native';
+import { colors, radius, shadow, spacing, typography } from '../../../theme';
 
 const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: colors.background },
 
-  container: {
-    backgroundColor: '#fcfcfc',
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center'
+  hero: {
+    backgroundColor: colors.primary,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.xl,
+    borderBottomLeftRadius: radius.lg,
+    borderBottomRightRadius: radius.lg,
+  },
+  heroLabel: {
+    color: 'rgba(255,255,255,0.85)',
+    fontSize: typography.size.caption,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginBottom: spacing.xs,
+  },
+  heroTitle: {
+    color: colors.textOnPrimary,
+    fontSize: typography.size.titleLg,
+    fontWeight: typography.weight.bold,
   },
 
-  formObservacao: {
-    justifyContent: 'center',
+  scrollContent: {
+    padding: spacing.lg,
+    paddingBottom: 120,
+  },
+
+  section: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.lg,
+    padding: spacing.lg,
+    marginBottom: spacing.lg,
+    ...shadow.sm,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
     alignItems: 'center',
-    margin: 5
+    marginBottom: spacing.md,
   },
-
-  formEndereco: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 5
-  },
-
-  formInputObservacao: {
-    backgroundColor: "#000000",
-    width: 320,
-    maxHeight: 150,
-    borderWidth: 0.5,
-    borderRadius: 50,
-    marginVertical: 5,
-    padding: 5,
-    justifyContent: 'center'
-  },
-
-
-  viewCalendario: {
+  sectionIconWrap: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: colors.primaryLight,
     alignItems: 'center',
     justifyContent: 'center',
+    marginRight: spacing.sm,
   },
-
-  viewHorario: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginVertical: 10,
-    marginHorizontal: 3
+  sectionTitle: {
+    fontSize: typography.size.title,
+    fontWeight: typography.weight.semibold,
+    color: colors.textPrimary,
   },
-
-  textNome: {
-    fontSize: 24,
-    fontWeight: "bold",
-    margin: 5,
-    color: '#000000'
-  },
-
-  textGeral: {
-    fontSize: 16,
-    color: '#000000'
-  },
-
-  textHoraSelecionada: {
-    color: 'white',
-    fontSize: 30,
-  },
-
-  textAdicionarEndereco: {
-    fontSize: 16,
-    textDecorationLine: 'underline'
-  },
-
-  textFinalizacao: {
-    color: 'white'
-  },
-
-  textEndereco: {
-    color: 'white',
-    textAlign: 'center'
+  sectionSubtitle: {
+    fontSize: typography.size.caption,
+    color: colors.textSecondary,
+    marginTop: 2,
   },
 
   horarioInput: {
-    backgroundColor: '#00000F',
-    borderWidth: 0.2,
-    borderRadius: 50,
-    width: 120,
-    height: 45,
-    justifyContent: 'center',
+    flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 5
+    justifyContent: 'space-between',
+    backgroundColor: colors.background,
+    borderRadius: radius.md,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
+    minHeight: 56,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  horarioText: {
+    fontSize: typography.size.h2,
+    fontWeight: typography.weight.bold,
+    color: colors.textPrimary,
+    letterSpacing: 2,
   },
 
-  inputObservacao: {
-    color: "#FFFFFF",
+  textareaWrap: {
+    backgroundColor: colors.background,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    minHeight: 88,
+  },
+  textarea: {
+    color: colors.textPrimary,
+    fontSize: typography.size.body,
     textAlignVertical: 'top',
-    margin: 15,
-    fontSize: 16,
+    minHeight: 70,
+    padding: 0,
   },
 
-  buttonSolicitacao: {
+  enderecoBox: {
+    backgroundColor: colors.background,
+    borderRadius: radius.md,
+    padding: spacing.md,
+    marginBottom: spacing.sm,
+    minHeight: 50,
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#00000F',
-    borderWidth: 0.2,
-    borderRadius: 50,
-    width: 300,
-    height: 50,
-    marginVertical: 10
+  },
+  enderecoText: {
+    fontSize: typography.size.body,
+    color: colors.textPrimary,
+  },
+  enderecoEmpty: {
+    fontSize: typography.size.body,
+    color: colors.textMuted,
+    fontStyle: 'italic',
+  },
+
+  footer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: colors.surface,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.xl,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
   },
 });
 
-export default styles
+export default styles;

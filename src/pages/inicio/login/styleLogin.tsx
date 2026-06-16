@@ -1,173 +1,112 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+import { colors, radius, spacing, typography } from '../../../theme';
+
+const { height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  logo: {
-    marginBottom: 10,
-    marginTop: 10,
-    width: 200,
-    height: 200,
-  },
-
-  formLogin: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 30,
-  },
-
-  container: {
-    backgroundColor: '#FCFCFC',
-    flex: 2,
-    justifyContent: 'center',
-  },
-
-  input: {
-    backgroundColor: '#00000F',
-    borderWidth: 0.2,
-    borderRadius: 50,
-    width: 300,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: 'white',
-  },
-
-  form: {
-    width: 250,
-    height: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 10,
-    marginTop: 10,
-  },
-
-  label: {
-    fontSize: 18,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 15,
-    marginTop: 25,
-    color: 'white',
-  },
-
-  button: {
-    backgroundColor: '#00000F',
-    borderWidth: 0.2,
-    borderRadius: 50,
-    width: 300,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  buttonContainer: {
-    marginTop: 60,
-    marginBottom: 5,
-  },
-
-  labelCadastro: {
-    fontSize: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10,
-    color: 'white',
-  },
-
-  labelBold: {
-    fontSize: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontWeight: 'bold',
-    marginTop: 5,
-    textDecorationLine: 'underline',
-    height: 30,
-    width: 30,
-  },
-
-  labelEntrar: {
-    color: '#FFFFFF',
-  },
-
-  image: {
-    flex: 1,
-    resizeMode: 'cover',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  validar: {
-    fontSize: 20,
-    color: '#FFFFFF',
-  },
-
-  ViewerModologin: {
-    width: 250,
-    height: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 30,
-    marginTop: 30,
-  },
-
-  fitaLabelModoLogin: {
-    backgroundColor: '#5E6162',
-    height: 50,
-    width: 500,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  inputModoLogin: {
-    backgroundColor: '#1199C5',
-    borderWidth: 0.2,
-    borderRadius: 50,
-    width: 250,
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  labelTituloModoLogin: {
-    color: '#FFFFFF',
-    fontSize: 18,
-  },
-
-  labelModoLogin: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-
-  inputModoLoginVisitante: {
-    backgroundColor: '#1199C5',
-    borderWidth: 0.2,
-    borderRadius: 50,
-    width: 300,
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  errors: {
-    color: 'red',
-    justifyContent: 'center',
-    textAlign: 'center',
-  },
-
-  labelBorder: {
-    height: 20,
-    justifyContent: 'center',
-    textAlign: 'center',
-    marginTop: 10,
-    marginBottom: 10,
-  },
+  container: { flex: 1, backgroundColor: colors.primaryDark },
 
   video: {
     position: 'absolute',
-    zIndex: 0,
     top: 0,
     right: 0,
     left: 0,
     bottom: 0,
-    opacity: 0.9,
+  },
+
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(15, 23, 42, 0.55)',
+  },
+
+  scroll: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+    paddingHorizontal: spacing.xl,
+    paddingTop: spacing.xxl,
+    paddingBottom: spacing.xl,
+    minHeight: height,
+  },
+
+  header: {
+    alignItems: 'center',
+    marginTop: spacing.xxl,
+  },
+  logo: {
+    width: 110,
+    height: 110,
+    resizeMode: 'contain',
+  },
+  brand: {
+    color: colors.textOnPrimary,
+    fontSize: typography.size.h2,
+    fontWeight: typography.weight.bold,
+    marginTop: spacing.sm,
+    letterSpacing: 1,
+  },
+  tagline: {
+    color: 'rgba(255,255,255,0.85)',
+    fontSize: typography.size.body,
+    marginTop: spacing.xs,
+    textAlign: 'center',
+  },
+
+  card: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.xl,
+    padding: spacing.xl,
+    marginTop: spacing.xxl,
+  },
+  cardTitle: {
+    fontSize: typography.size.titleLg,
+    fontWeight: typography.weight.bold,
+    color: colors.textPrimary,
+    marginBottom: spacing.xs,
+  },
+  cardSubtitle: {
+    fontSize: typography.size.body,
+    color: colors.textSecondary,
+    marginBottom: spacing.lg,
+  },
+
+  forgot: {
+    alignSelf: 'flex-end',
+    marginTop: -spacing.sm,
+    marginBottom: spacing.lg,
+  },
+  forgotText: {
+    color: colors.primary,
+    fontWeight: typography.weight.semibold,
+    fontSize: typography.size.body,
+  },
+
+  signupRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: spacing.xl,
+  },
+  signupText: {
+    color: 'rgba(255,255,255,0.9)',
+    fontSize: typography.size.body,
+  },
+  signupLink: {
+    color: colors.accent,
+    fontSize: typography.size.body,
+    fontWeight: typography.weight.bold,
+    marginLeft: spacing.xs,
+  },
+
+  errorBox: {
+    backgroundColor: colors.dangerLight,
+    borderRadius: radius.sm,
+    padding: spacing.sm,
+    marginBottom: spacing.md,
+  },
+  errorText: {
+    color: colors.danger,
+    fontSize: typography.size.body,
+    textAlign: 'center',
   },
 });
 

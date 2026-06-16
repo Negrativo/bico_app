@@ -16,3 +16,8 @@ export const API_BASE_URL = 'http://10.0.2.2:8070';
 
 // Chave Google Maps / Geocoding. Em produção, prefira restringir por pacote.
 export const GOOGLE_API_KEY = '';
+
+// Ativa o modo MOCK: todas as chamadas axios são respondidas localmente
+// (ver `src/service/mock/mockAdapter.ts`). Útil para testar o fluxo do app
+// (login, cadastro, solicitações) sem o backend rodando.
+export const USE_MOCK = false;

@@ -24,6 +24,7 @@ export interface CadastroFinalParams {
 
 export interface ListaServicosParams {
   listaServicos: string[];
+  categoriaNome?: string;
 }
 
 export interface AgendamentoServicoParams {

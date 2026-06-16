@@ -1,169 +1,175 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
 import Modal from 'react-native-modal';
 import { Formik } from 'formik';
+import MaskInput, { Masks } from 'react-native-mask-input';
+
 import styles from './StyleCadastroInicial';
 import { TipoCadastroParams, propsStack } from '../../../routes/stack/models/model';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { Button } from 'react-native';
 import { cadastrarUsuario } from '../../../service/usuarioService/UsuarioService';
-import MaskInput, { Masks } from 'react-native-mask-input';
-
 import ValidateCadastro from '../../../components/schema/CadastroSchema';
+import { Button, Header, Input, Screen } from '../../../components/ui';
+import { colors, radius, spacing, typography } from '../../../theme';
 
-export default function ({ }) {
-  const logo = require('../../../../assets/BICO-3.png');
+export default function CadastroInicial() {
   const navigation = useNavigation<propsStack>();
   const params = useRoute();
   const tipoCadastro: TipoCadastroParams = params.params as unknown as TipoCadastroParams;
+  const isPrestador = tipoCadastro?.isCadastroProfissional === true;
 
   const [mensagemModal, setMensagemModal] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
-
-  const showModal = () => {
-    setModalVisible(true);
-  };
-
-  const hideModal = () => {
-    setModalVisible(false);
-  };
+  const hideModal = () => setModalVisible(false);
 
   return (
-    <View style={styles.container}>
+    <Screen scrollable padded={false}>
+      <View style={{ paddingHorizontal: spacing.lg }}>
+        <Header title="Criar conta" onBack={() => navigation.goBack()} />
+      </View>
+
+      <View style={styles.hero}>
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>
+            {isPrestador ? 'Cadastro de prestador' : 'Cadastro de cliente'}
+          </Text>
+        </View>
+        <Text style={styles.title}>Quase lá!</Text>
+        <Text style={styles.subtitle}>
+          Preencha seus dados para começar a usar o BICO
+        </Text>
+      </View>
+
       <Formik
         initialValues={{ nome: '', email: '', senha: '', senha2: '', telefone: '', error: '' }}
         validationSchema={ValidateCadastro}
-        onSubmit={async (values, { setErrors }) => {
-          const nome = values.nome;
-          const email = values.email;
-          const telefone = values.telefone;
-          const senha = values.senha;
-          if (nome.length > 0 && email.length > 0 && senha.length > 0) {
-            const usuarioCriado = await cadastrarUsuario(nome, email, telefone, senha);
-            if (usuarioCriado != "") {
-              if (tipoCadastro.isCadastroProfissional === true) {
-                navigation.navigate('CadastroFinal', { usuarioId: usuarioCriado });
-              } else {
+        onSubmit={async (values) => {
+          const { nome, email, telefone, senha } = values;
+          if (!nome || !email || !senha) return;
+          const usuarioCriado = await cadastrarUsuario(nome, email, telefone, senha);
+          if (usuarioCriado) {
+            if (isPrestador) {
+              navigation.navigate('CadastroFinal', { usuarioId: usuarioCriado });
+            } else {
+              setMensagemModal('Conta criada com sucesso!');
+              setModalVisible(true);
+              setTimeout(() => {
+                hideModal();
                 navigation.navigate('Login');
-              }
+              }, 1200);
             }
           }
         }}
       >
         {(props) => (
-          <View style={styles.image}>
-
-            <Modal isVisible={isModalVisible}>
+          <View style={styles.form}>
+            <Modal isVisible={isModalVisible} onBackdropPress={hideModal}>
               <View style={styles.modal}>
-                <Text>{mensagemModal}</Text>
-                <Button title="Fechar" onPress={hideModal} />
+                <Text style={styles.modalText}>{mensagemModal}</Text>
+                <Button label="Fechar" size="sm" onPress={hideModal} fullWidth={false} />
               </View>
             </Modal>
 
-            <Image
-              source={logo}
-              style={styles.logo}
+            {!!props.errors.error && (
+              <View style={styles.errorBox}>
+                <Text style={styles.errorText}>{props.errors.error}</Text>
+              </View>
+            )}
+
+            <Input
+              label="Nome completo"
+              iconLeft="account-outline"
+              placeholder="Seu nome"
+              autoCapitalize="words"
+              value={props.values.nome}
+              onChangeText={(t) => props.setFieldValue('nome', t)}
+              error={props.dirty && props.errors.nome}
             />
 
-            <View style={styles.form} >
-              <Text style={styles.label}>NOME</Text>
-              <TextInput
-                style={styles.input}
-                textAlign="center"
-                textContentType='emailAddress'
-                placeholder="Nome completo"
-                placeholderTextColor="#D9DBDC"
-                autoCapitalize="none"
-                autoCorrect={false}
-                value={props.values.nome}
-                onChangeText={text => props.setFieldValue('nome', text)}
-              />
-              {props.dirty && props.errors.nome && <Text style={styles.errors}>{props.errors.nome}</Text>}
+            <Input
+              label="E-mail"
+              iconLeft="email-outline"
+              placeholder="seu@email.com"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+              value={props.values.email}
+              onChangeText={(t) => props.setFieldValue('email', t)}
+              error={props.dirty && props.errors.email}
+            />
+
+            <View style={{ marginBottom: spacing.lg }}>
+              <Text style={{
+                fontSize: typography.size.body,
+                fontWeight: typography.weight.semibold,
+                color: colors.textSecondary,
+                marginBottom: spacing.xs,
+              }}>
+                Telefone
+              </Text>
+              <View style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: colors.surface,
+                borderRadius: radius.md,
+                borderWidth: 1.5,
+                borderColor: colors.border,
+                paddingHorizontal: spacing.md,
+                minHeight: 50,
+              }}>
+                <MaskInput
+                  style={{
+                    flex: 1,
+                    color: colors.textPrimary,
+                    fontSize: typography.size.bodyLg,
+                    paddingVertical: spacing.md,
+                  }}
+                  value={props.values.telefone}
+                  onChangeText={(_masked, unmasked) => props.setFieldValue('telefone', unmasked)}
+                  mask={Masks.BRL_PHONE}
+                  placeholder="(11) 99999-9999"
+                  placeholderTextColor={colors.textMuted}
+                  keyboardType="phone-pad"
+                />
+              </View>
             </View>
 
+            <Input
+              label="Senha"
+              iconLeft="lock-outline"
+              placeholder="Mínimo 6 caracteres"
+              secureTextEntry
+              autoCapitalize="none"
+              value={props.values.senha}
+              onChangeText={(t) => props.setFieldValue('senha', t)}
+              error={props.dirty && props.errors.senha}
+            />
 
-            <View style={styles.form} >
-              <Text style={styles.label}>E-MAIL</Text>
-              <TextInput
-                style={styles.input}
-                textAlign="center"
-                textContentType='emailAddress'
-                placeholder="E-mail"
-                placeholderTextColor="#D9DBDC"
-                keyboardType="email-address"
-                autoComplete="email"
-                autoCapitalize="none"
-                autoCorrect={false}
-                value={props.values.email}
-                onChangeText={text => props.setFieldValue('email', text)}
-              />
-              {props.dirty && props.errors.email && <Text style={styles.errors}>{props.errors.email}</Text>}
-            </View>
+            <Input
+              label="Confirmar senha"
+              iconLeft="lock-check-outline"
+              placeholder="Digite a senha novamente"
+              secureTextEntry
+              autoCapitalize="none"
+              value={props.values.senha2}
+              onChangeText={(t) => props.setFieldValue('senha2', t)}
+              error={props.dirty && props.errors.senha2}
+            />
 
-            <View style={styles.form} >
-              <Text style={styles.label}>Numero para contato profissional</Text>
-              <MaskInput
-                style={styles.input}
-                value={props.values.telefone}
-                onChangeText={(masked, unmasked, obfuscated) => props.setFieldValue('telefone', unmasked)}
-                mask={Masks.BRL_PHONE}
-                textAlign="center"
-                textContentType='telephoneNumber'
-                placeholder="Telefone"
-                placeholderTextColor="#FFFFFF"
-                autoComplete='tel-device'
-              />
-            </View>
+            <Button
+              label={isPrestador ? 'CONTINUAR' : 'CADASTRAR'}
+              size="lg"
+              iconRight="arrow-right"
+              onPress={() => props.handleSubmit()}
+            />
 
-            <View style={styles.form} >
-              <Text style={styles.label}>SENHA</Text>
-              <TextInput
-                style={styles.input}
-                textAlign="center"
-                textContentType='password'
-                secureTextEntry={true}
-                placeholder="Senha"
-                placeholderTextColor="#D9DBDC"
-                autoComplete="password"
-                autoCapitalize="none"
-                autoCorrect={false}
-                value={props.values.senha}
-                onChangeText={text => props.setFieldValue('senha', text)}
-              />
-              {props.dirty && props.errors.senha && <Text style={styles.errors}>{props.errors.senha}</Text>}
-            </View>
-
-
-            <View style={styles.form} >
-              <Text style={styles.label}>CONFIRMAR SENHA SENHA</Text>
-              <TextInput
-                style={styles.input}
-                textAlign="center"
-                textContentType='password'
-                secureTextEntry={true}
-                placeholder="Confirmar Senha"
-                placeholderTextColor="#D9DBDC"
-                autoComplete="password"
-                autoCapitalize="none"
-                autoCorrect={false}
-                value={props.values.senha2}
-                onChangeText={text => props.setFieldValue('senha2', text)}
-              />
-              {props.dirty && props.errors.senha2 && <Text style={styles.errors}>{props.errors.senha2}</Text>}
-            </View>
-
-            {props.errors.error && <Text style={styles.errorCadastro}>{props.errors.error}</Text>}
-            <TouchableOpacity style={styles.button} onPress={props.handleSubmit}>
-              <Text style={styles.cadastrar}>CADASTRAR</Text>
-            </TouchableOpacity>
-            <Text style={styles.labelCadastro}>Ao clicar em cadastrar você concorda com os
-              <TouchableOpacity>
-                <Text style={styles.labelBold}>TERMOS DE USO</Text>
-              </TouchableOpacity>
+            <Text style={styles.terms}>
+              Ao continuar, você concorda com os{' '}
+              <Text style={styles.termsLink}>Termos de Uso</Text>
             </Text>
           </View>
         )}
       </Formik>
-    </View>
+    </Screen>
   );
 }

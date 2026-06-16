@@ -1,35 +1,34 @@
 import { StyleSheet } from 'react-native';
+import { colors, radius, shadow, spacing, typography } from '../../theme';
 
 const styles = StyleSheet.create({
-
-  container: {
-    width: 150,
-    height: 170,
-    shadowColor: 'black',
-    marginVertical: 25
+  card: {
+    flex: 1,
+    backgroundColor: colors.surface,
+    borderRadius: radius.lg,
+    padding: spacing.lg,
+    margin: spacing.sm,
+    minHeight: 140,
+    ...shadow.sm,
   },
-
-  containerView: {
-    margin: 10,
+  iconWrap: {
+    width: 56,
+    height: 56,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: spacing.md,
   },
-
-  containerImagem: {
-    marginBottom: 10
+  nome: {
+    fontSize: typography.size.bodyLg,
+    fontWeight: typography.weight.semibold,
+    color: colors.textPrimary,
   },
-
-  Texto: {
-    fontSize: 18,
-    textAlign: 'center',
-    color: '#000000'
+  subtitle: {
+    fontSize: typography.size.caption,
+    color: colors.textSecondary,
+    marginTop: spacing.xs,
   },
-
-  fotoCategoria: {
-    width: 150,
-    height: 150,
-    borderWidth: 0.2,
-    borderRadius: 15,
-  },
-
 });
 
 export default styles;

@@ -1,5 +1,8 @@
 export interface CategoriaProps {
   nome: string;
-  onPress: any;
-  foto: any;
+  onPress: () => void;
+  icon: string;
+  color: string;
+  bgColor: string;
+  totalServicos?: number;
 }

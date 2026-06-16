@@ -1,102 +1,80 @@
 import { StyleSheet } from 'react-native';
+import { colors, radius, spacing, typography } from '../../../theme';
 
 const styles = StyleSheet.create({
-  logo: {
-    marginTop: -50,
-    width: 200,
-    height: 180,
-  },
-
-  image: {
-    flex: 1,
-    resizeMode: 'cover',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  container: { flex: 1, backgroundColor: colors.background },
 
   modal: {
-    backgroundColor: '#FFFFFF',
-    width: 250,
-    height: 100,
-    justifyContent: 'center',
+    backgroundColor: colors.surface,
+    borderRadius: radius.lg,
+    padding: spacing.xl,
     alignItems: 'center',
-    color: '#00000F',
+  },
+  modalText: {
+    fontSize: typography.size.bodyLg,
+    color: colors.textPrimary,
+    textAlign: 'center',
+    marginBottom: spacing.md,
   },
 
-  container: {
-    backgroundColor: '#FCFCFC',
-    flex: 1,
-    justifyContent: 'center',
+  hero: {
+    paddingHorizontal: spacing.xl,
+    paddingTop: spacing.xl,
+    paddingBottom: spacing.lg,
   },
-
-  cadastrar: {
-    color: 'white',
+  badge: {
+    alignSelf: 'flex-start',
+    backgroundColor: colors.primaryLight,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    borderRadius: radius.pill,
+    marginBottom: spacing.md,
   },
-
-  input: {
-    backgroundColor: '#00000F',
-    borderWidth: 0.2,
-    borderRadius: 50,
-    width: 250,
-    height: 45,
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: 'white',
+  badgeText: {
+    color: colors.primary,
+    fontSize: typography.size.caption,
+    fontWeight: typography.weight.semibold,
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
+  },
+  title: {
+    fontSize: typography.size.h2,
+    fontWeight: typography.weight.bold,
+    color: colors.textPrimary,
+  },
+  subtitle: {
+    fontSize: typography.size.body,
+    color: colors.textSecondary,
+    marginTop: spacing.xs,
   },
 
   form: {
-    width: 300,
-    height: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 10,
-    marginTop: 40,
+    paddingHorizontal: spacing.xl,
+    paddingTop: spacing.lg,
   },
 
-  label: {
-    fontSize: 14,
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: '#000000'
+  errorBox: {
+    backgroundColor: colors.dangerLight,
+    borderRadius: radius.sm,
+    padding: spacing.sm,
+    marginBottom: spacing.md,
+  },
+  errorText: {
+    color: colors.danger,
+    fontSize: typography.size.body,
+    textAlign: 'center',
   },
 
-  button: {
-    backgroundColor: '#00000F',
-    borderWidth: 0.2,
-    borderRadius: 50,
-    width: 280,
-    height: 45,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 50,
-    marginBottom: -5,
+  terms: {
+    fontSize: typography.size.caption,
+    color: colors.textMuted,
+    textAlign: 'center',
+    marginTop: spacing.lg,
+    paddingHorizontal: spacing.lg,
   },
-
-  labelCadastro: {
-    fontSize: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10,
-    paddingHorizontal: 10,
-    color: '#000000'
-  },
-
-  labelBold: {
-    fontSize: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontWeight: 'bold',
-    marginTop: 10,
-    textDecorationLine: 'underline',
-    color: '#000000'
-  },
-
-  errors: {
-    color: 'red',
-  },
-
-  errorCadastro: {
-    marginBottom: -20,
+  termsLink: {
+    color: colors.primary,
+    fontWeight: typography.weight.semibold,
   },
 });
 

@@ -1,31 +1,17 @@
 import { StyleSheet } from 'react-native';
+import { colors, spacing } from '../../../theme';
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#FCFCFC',
-    flex: 1,
-  },
+  container: { flex: 1, backgroundColor: colors.background },
   conteudo: {
-    paddingHorizontal: 8,
-    paddingTop: 16,
-    paddingBottom: 32,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.xxl,
   },
-  titulo: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#222',
-    marginHorizontal: 16,
-    marginBottom: 8,
-  },
-  vazioWrapper: {
+  loaderWrapper: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 60,
-  },
-  Text: {
-    fontSize: 16,
-    color: '#555',
   },
 });
 
