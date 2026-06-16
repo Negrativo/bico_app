@@ -14,16 +14,16 @@ const Login = () => {
   //const video = require('../../../../assets/fundofinal.mp4');
   const logo = require('../../../../assets/BICO-3.png');
   const navigation = useNavigation<propsStack>();
-  const { user, LoginUser } = useUser();
+  const { LoginUser } = useUser();
 
   async function handleSubmitCadastro() {
     navigation.navigate('TipoCadastro');
   }
 
   async function handleLogin(email: string, senha: string) {
-    await LoginUser(email, senha);
-    if (!!user?.id) {
-      navigation.navigate('Home');
+    const loggedUser = await LoginUser(email, senha);
+    if (loggedUser?.id) {
+      navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
     }
   }
 

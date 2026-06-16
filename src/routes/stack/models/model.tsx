@@ -11,6 +11,7 @@ export type propsNavigationStack = {
   AgendamentoServico: AgendamentoServicoParams;
   Perfil: undefined;
   SolicitacoesServico: undefined;
+  MinhasSolicitacoes: undefined;
 };
 
 export interface TipoCadastroParams {

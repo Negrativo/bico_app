@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 60,
   },
-  Text: {
+  textoVazio: {
     fontSize: 16,
     color: '#555',
   },

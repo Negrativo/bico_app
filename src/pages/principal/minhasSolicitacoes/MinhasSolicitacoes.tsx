@@ -1,19 +1,17 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, Text, FlatList, RefreshControl, ActivityIndicator } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 
-import styles from './StyleSolicitacoesServico';
+import styles from './StyleMinhasSolicitacoes';
 import {
-  getSolicitacoesDoPrestador,
-  aceitarSolicitacao,
-  recusarSolicitacao,
-  concluirSolicitacao,
+  getSolicitacoesDoCliente,
+  cancelarSolicitacao,
 } from '../../../service/solicitacaoService/solicitacaoService';
 import { useUser } from '../../../context/AuthContext';
 import { ServicoDoUsuarioDTO } from '../../../dtos/ServicoDoUsuarioDTO';
 import SolicitacaoServico from '../../../components/solicitacaoServico/SolicitacaoServicoComponent';
 
-export default function () {
+export default function MinhasSolicitacoes() {
   const [dadosLista, setDados] = useState<ServicoDoUsuarioDTO[]>([]);
   const [carregando, setCarregando] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -26,7 +24,7 @@ export default function () {
       return;
     }
     try {
-      const lista = await getSolicitacoesDoPrestador(user.id);
+      const lista = await getSolicitacoesDoCliente(user.id);
       setDados(lista ?? []);
     } catch {
       setDados([]);
@@ -48,9 +46,7 @@ export default function () {
     setDados(prev => prev.map(s => (s.id === atualizado.id ? atualizado : s)));
   };
 
-  const onAceitar = async (id: string) => atualizarItem(await aceitarSolicitacao(id));
-  const onRecusar = async (id: string) => atualizarItem(await recusarSolicitacao(id));
-  const onConcluir = async (id: string) => atualizarItem(await concluirSolicitacao(id));
+  const onCancelar = async (id: string) => atualizarItem(await cancelarSolicitacao(id));
 
   if (carregando) {
     return (
@@ -62,7 +58,7 @@ export default function () {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>Solicitações recebidas</Text>
+      <Text style={styles.titulo}>Minhas solicitações</Text>
       {dadosLista.length > 0 ? (
         <FlatList
           contentContainerStyle={styles.conteudo}
@@ -80,7 +76,7 @@ export default function () {
           }
           renderItem={({ item }) => (
             <SolicitacaoServico
-              modo="prestador"
+              modo="cliente"
               status={item.status}
               usuarioSolicitante={item.usuarioSolicitante}
               usuarioPrestador={item.usuarioPrestador}
@@ -89,15 +85,13 @@ export default function () {
               horarioSolicitado={item.horarioSolicitado}
               observacao={item.observacao}
               endereco={item.endereco}
-              onPressAceite={() => onAceitar(item.id)}
-              onPressRecusar={() => onRecusar(item.id)}
-              onPressConcluir={() => onConcluir(item.id)}
+              onPressCancelar={() => onCancelar(item.id)}
             />
           )}
         />
       ) : (
         <View style={styles.vazioWrapper}>
-          <Text style={styles.Text}>Nenhuma solicitação no momento</Text>
+          <Text style={styles.textoVazio}>Você ainda não fez nenhuma solicitação.</Text>
         </View>
       )}
     </View>

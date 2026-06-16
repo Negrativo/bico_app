@@ -19,11 +19,12 @@ export default function () {
   const navigation = useNavigation<propsStack>();
   const [horaAgendamento, setHoras] = useState('00:00');
   const [mostraSelecaoHorario, setSelecaoHorario] = useState(false);
-  const [diaSelecionado, setDiaSelecionado] = useState();
+  const [diaSelecionado, setDiaSelecionado] = useState<string>('');
   const [location, setLocation] = useState("");
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   const [observacao, setObservacao] = useState("");
+  const [enviando, setEnviando] = useState(false);
 
   const { user } = useUser();
   const params = useRoute();
@@ -80,28 +81,42 @@ export default function () {
   };
 
   const solicitar = async () => {
-    //TO DO - criar processo para pegar dia selecionado calendario
-    if (!!user) {
-      const usuarioSolicitante = user.id;
-      const servico = servicoSelecionado.servicoSelecionado;
-      const latitudeString = latitude.toString();
-      const longitudeString = longitude.toString();
+    if (!user) {
+      Toast.show({ type: 'error', text1: 'Faça login para solicitar um serviço' });
+      return;
+    }
+    if (!diaSelecionado) {
+      Toast.show({ type: 'error', text1: 'Selecione uma data no calendário' });
+      return;
+    }
+    if (!horaAgendamento || horaAgendamento === '00:00') {
+      Toast.show({ type: 'error', text1: 'Selecione um horário' });
+      return;
+    }
+    if (!latitude || !longitude || !location) {
+      Toast.show({ type: 'error', text1: 'Selecione uma localização (toque em "Buscar localização")' });
+      return;
+    }
+
+    setEnviando(true);
+    try {
       const solicitacaoDTO: SolicitacaoDTO = {
-        usuarioSolicitante,
-        servico,
-        diaSelecionado: "2023-04-25",
+        usuarioSolicitante: user.id,
+        servico: servicoSelecionado.servicoSelecionado,
+        diaSelecionado,
         horarioSolicitado: horaAgendamento,
         observacao,
-        latitude: latitudeString,
-        longitude: longitudeString,
-        endereco: location
+        latitude: latitude.toString(),
+        longitude: longitude.toString(),
+        endereco: location,
       };
       const isSucess = await solicitarServico(solicitacaoDTO);
       if (isSucess === true) {
         navigation.navigate('Home');
       }
+    } finally {
+      setEnviando(false);
     }
-
   }
 
   return (
@@ -160,8 +175,8 @@ export default function () {
           </TouchableOpacity>
         </View>
         <View>
-          <TouchableOpacity onPress={solicitar} style={styles.buttonSolicitacao}>
-            <Text style={styles.textFinalizacao}>SOLICITAR PROFISSIONAL</Text>
+          <TouchableOpacity onPress={solicitar} disabled={enviando} style={[styles.buttonSolicitacao, enviando && { opacity: 0.6 }]}>
+            <Text style={styles.textFinalizacao}>{enviando ? 'ENVIANDO...' : 'SOLICITAR PROFISSIONAL'}</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>

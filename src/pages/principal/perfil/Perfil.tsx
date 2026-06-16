@@ -7,15 +7,17 @@ import { useNavigation } from '@react-navigation/native';
 import { propsStack } from '../../../routes/stack/models/model';
 
 export default function () {
-  const { user, setUser, LogoutUser } = useUser();
+  const { user, LogoutUser } = useUser();
   const navigation = useNavigation<propsStack>();
 
-  function EditarUser(): void {
-    throw new Error('Function not implemented.');
+  const isPrestador = !!user && user.servicos && user.servicos.length > 0;
+
+  function abrirSolicitacoesRecebidas(): void {
+    navigation.navigate('SolicitacoesServico');
   }
 
-  function solicitacaoUser(): void {
-    navigation.navigate('SolicitacoesServico');
+  function abrirMinhasSolicitacoes(): void {
+    navigation.navigate('MinhasSolicitacoes');
   }
 
   function logoutUser(): void {
@@ -27,22 +29,23 @@ export default function () {
       <View style={styles.container}>
         <View style={styles.formCabecalhoPerfil}>
           <Text style={styles.textNome}>{user?.nome}</Text>
+          {!!user?.email && <Text style={styles.Text}>{user.email}</Text>}
         </View>
         <Text style={styles.Text}>__________________________</Text>
         <View style={styles.scrollContainer}>
           <View style={styles.formBottons}>
-            {(!!user && user?.servicos.length > 0)
-              ?
-              <TouchableOpacity style={styles.buttonCadastro} onPress={() => solicitacaoUser()}>
-                <Text style={styles.textBottom}>Solicitações de serviço</Text>
+            <TouchableOpacity style={styles.buttonCadastro} onPress={abrirMinhasSolicitacoes}>
+              <Text style={styles.textBottom}>Minhas solicitações</Text>
+            </TouchableOpacity>
+            {isPrestador && (
+              <TouchableOpacity style={styles.buttonCadastro} onPress={abrirSolicitacoesRecebidas}>
+                <Text style={styles.textBottom}>Solicitações recebidas</Text>
               </TouchableOpacity>
-              :
-              <></>
-            }
+            )}
             <TouchableOpacity style={styles.buttonCadastro}>
               <Text style={styles.textBottom}>Configurações</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonCadastro} onPress={() => logoutUser()}>
+            <TouchableOpacity style={styles.buttonCadastro} onPress={logoutUser}>
               <Text style={styles.textBottom}>Sair</Text>
             </TouchableOpacity>
           </View>

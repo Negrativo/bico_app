@@ -1,20 +1,23 @@
-import React, { useState, useContext, createContext, useEffect } from 'react';
+import React, { useState, useContext, createContext, useEffect, useCallback } from 'react';
 import { UsuarioDTO } from '../dtos/UsuarioDTO';
 import { login } from '../service/loginService/LoginService';
-import { onSignIn, onSignOut, UserSignedIn } from '../service/auth';
+import { saveSession, clearSession, getStoredUser, getToken } from '../service/auth';
+import { setOnUnauthorized } from '../service/api';
 
 interface UserContextData {
   user: UsuarioDTO | null;
+  loading: boolean;
   setUser: React.Dispatch<React.SetStateAction<UsuarioDTO | null>>;
-  LoginUser: (email: string, password: string) => Promise<void>;
-  LogoutUser: () => void;
+  LoginUser: (email: string, password: string) => Promise<UsuarioDTO | null>;
+  LogoutUser: () => Promise<void>;
 }
 
 const UserContext = createContext<UserContextData>({
   user: null,
+  loading: true,
   setUser: () => { },
-  LoginUser: async (email: string, password: string) => { },
-  LogoutUser: () => { }
+  LoginUser: async () => null,
+  LogoutUser: async () => { },
 });
 
 interface UserProviderProps {
@@ -25,31 +28,47 @@ export const useUser = (): UserContextData => useContext(UserContext);
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UsuarioDTO | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
+  // Restaura a sessão persistida apenas uma vez na montagem.
   useEffect(() => {
-    UserSignedIn()
-      .then(hasUser => {
-        if (!!hasUser) {
-          setUser(hasUser);
+    let cancelled = false;
+    (async () => {
+      try {
+        const storedUser = await getStoredUser();
+        const token = await getToken();
+        if (!cancelled && storedUser && token) {
+          setUser(storedUser);
         }
-      })
-  })
-
-  const LoginUser = async (email: string, senha: string) => {
-    const user = await login(email, senha);
-    setUser(user);
-    onSignIn(user);
-  }
-
-  const LogoutUser = () => {
-    onSignOut().then(hasUser => {
-      if (hasUser) {
-          setUser(null);
+      } finally {
+        if (!cancelled) setLoading(false);
       }
-    })
-  }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
-  const value = { user, setUser, LoginUser, LogoutUser };
+  // Limpa estado quando o axios receber 401.
+  useEffect(() => {
+    setOnUnauthorized(() => setUser(null));
+    return () => setOnUnauthorized(null);
+  }, []);
+
+  const LoginUser = useCallback(async (email: string, senha: string) => {
+    const response = await login(email, senha);
+    if (!response) return null;
+    await saveSession(response.usuario, response.token);
+    setUser(response.usuario);
+    return response.usuario;
+  }, []);
+
+  const LogoutUser = useCallback(async () => {
+    await clearSession();
+    setUser(null);
+  }, []);
+
+  const value = { user, loading, setUser, LoginUser, LogoutUser };
 
   return (
     <UserContext.Provider value={value}>

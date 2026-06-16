@@ -61,3 +61,8 @@ yarn-error.log
 
 # Temporary files created by Metro to check the health of the file watcher
 .metro-health-check*
+
+# Configuração local com chaves de API (use environments.example.tsx como base)
+environments.tsx
+.env
+.env.local

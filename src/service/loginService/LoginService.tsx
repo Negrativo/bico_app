@@ -5,13 +5,17 @@ import { UsuarioDTO as Usuario } from "../../dtos/UsuarioDTO";
 import Toast from 'react-native-toast-message';
 import api from "../api";
 
-export async function login(email: string, senha: string): Promise<Usuario | null> {
+export interface LoginResponse {
+  token: string;
+  usuario: Usuario;
+}
+
+export async function login(email: string, senha: string): Promise<LoginResponse | null> {
   const usuarioLogin = { email, senha } as UsuarioEmailSenhaDTO;
 
   try {
-    const response = await api.post<Usuario>(`/inicio/login`, usuarioLogin);
-    const userResponse = response.data;
-    return userResponse;
+    const response = await api.post<LoginResponse>(`/auth/login`, usuarioLogin);
+    return response.data;
   } catch (error) {
     Toast.show({
       type: 'error',
@@ -26,7 +30,7 @@ export async function login(email: string, senha: string): Promise<Usuario | nul
 
 export async function verificarUsuarioExistente(emailUsuario: string): Promise<Boolean> {
   const data = { email: emailUsuario } as unknown as UsuarioEmailDTO;
-  return await api.post<Boolean>('/inicio/cadastro/usuario-existente', data)
+  return await api.post<Boolean>('/auth/email-existente', data)
     .then((response: AxiosResponse<Boolean>) => {
       return response.data;
     })
